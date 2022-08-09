@@ -94,19 +94,22 @@ void LU_reset() {
     digitalWrite(local_relay_LU, HIGH);
     imp_cnt_bkp = imp_cnt = talk_flag = loop_cnt = 0;
 }
-void send_LU(int cnt) {
+void send_LU(int cnt, int hall_relay) {
   //Serial.println("Выполняем send_LU");
+  digitalWrite(hall_relay, LOW);
   digitalWrite(local_relay_LU, LOW);
+  delay(5);
   digitalWrite(output_LU, LOW);
   delay(300);
   digitalWrite(output_LU, HIGH);
-  delay(60);
+  delay(50);
   for( int i = 0; i <= cnt; i++ ) {
     digitalWrite(output_LU, LOW);
     delay(6);
     digitalWrite(output_LU, HIGH);
     delay(6);
   }
+  digitalWrite(output_LU, HIGH);
 }
 
 void loop() {
@@ -134,68 +137,65 @@ void loop() {
     talk_flag = 1;
     //1 подъезд ( 1 - 25 )
     if(imp_cnt < 26) {
-      //Serial.println("Подъезд 1");
-      send_LU(imp_cnt);
       hall_relay = 4;
+      send_LU(imp_cnt, hall_relay);
     }
     //2 подъезд ( 26 - 59 )
     else if(imp_cnt >= 26 and imp_cnt < 60) {
-      send_LU( (imp_cnt) );
       hall_relay = 5;
+      send_LU(imp_cnt, hall_relay);
     }
     //3 подъезд ( 60 - 83 )
     else if(imp_cnt >= 60 and imp_cnt < 84) {
-      send_LU( (imp_cnt) );
       hall_relay = 6;
+      send_LU(imp_cnt, hall_relay);
     }
     //4 подъезд ( 84 - 99 )
     else if(imp_cnt >= 84 and imp_cnt < 100) {
-      send_LU( (imp_cnt) );
       hall_relay = 7;
+      send_LU(imp_cnt, hall_relay);
     }
     //5 подъезд ( 100 - 115 )
     else if(imp_cnt >= 100 and imp_cnt < 116) {
-      send_LU( (imp_cnt - 100) );
       hall_relay = 8;
+      send_LU((imp_cnt - 100), hall_relay);
     }
     //6 подъезд ( 116 - 139 )
     else if(imp_cnt >= 116 and imp_cnt < 140) {
-      send_LU( (imp_cnt - 100) );
       hall_relay = 9;
+      send_LU((imp_cnt - 100), hall_relay);
     }
     //7 подъезд ( 140 - 173 )
     else if(imp_cnt >= 140 and imp_cnt < 174) {
-      send_LU( (imp_cnt - 100) );
       hall_relay = 10;
+      send_LU((imp_cnt - 100), hall_relay);
     }
     //8 подъезд ( 174 - 197 )
     else if(imp_cnt >= 174 and imp_cnt < 198) {
-      send_LU( (imp_cnt - 100) );
       hall_relay = 11;
+      send_LU((imp_cnt - 100), hall_relay);
     }
     //9 подъезд ( 198 - 216 )
     else if(imp_cnt >= 198 and imp_cnt < 217) {
+      hall_relay = 12;
       if(imp_cnt < 200) {
-        send_LU( (imp_cnt - 100) );
+        send_LU((imp_cnt - 100), hall_relay);
       }
       else {
-        send_LU( (imp_cnt - 200) );
+        send_LU((imp_cnt - 200), hall_relay);
       }
-      hall_relay = 12;
     }
     //10 подъезд ( 217 - 235 )
     else if(imp_cnt >= 217 and imp_cnt < 236) {
-      send_LU( (imp_cnt - 200) );
       hall_relay = 13;
+      send_LU((imp_cnt - 200), hall_relay);
     }
     // офис УК (8 подъезд кв 36 на коммутаторе)
     else if(imp_cnt == 236) {
-      send_LU( (imp_cnt - 200) );
       hall_relay = 11;
+      send_LU((imp_cnt - 200), hall_relay);
     }
     imp_cnt = imp_cnt_bkp = 0;
-    digitalWrite(hall_relay, LOW);
-    delay(30);
     digitalWrite(local_relay_LN, LOW);
     //Serial.println("Реле!!!!");
   }
