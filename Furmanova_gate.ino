@@ -116,9 +116,9 @@ void send_LU(int cnt, int hall_relay) {
   delay(50);
   for( int i = 1; i <= cnt; i++ ) {
     digitalWrite(output_LU, LOW);
-    delayMicroseconds(260);
+    delayMicroseconds(180);
     digitalWrite(output_LU, HIGH);
-    delayMicroseconds(500);
+    delayMicroseconds(280);
   }
 }
 
